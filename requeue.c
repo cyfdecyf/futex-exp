@@ -1,16 +1,10 @@
+#include "futex.h"
 #include <linux/futex.h>
-#include <unistd.h>
-#include <sys/syscall.h>
 #include <pthread.h>
 #include <stdio.h>
 
-// Test behavior of futex requeue operation.
-
-// Code copied from http://locklessinc.com/articles/futex_cheat_sheet/
-static long sys_futex(void *addr1, int op, int val1, struct timespec *timeout, void *addr2, int val3)
-{
-    return syscall(SYS_futex, addr1, op, val1, timeout, addr2, val3);
-}
+// After FUTEX_REQUEUE, the waiting thread is waken up by FUTEX_WAKE on the new
+// futex instead of the original one specified when calling FUTEX_WAIT.
 
 static int ft_wait;
 static int ft_requ;
